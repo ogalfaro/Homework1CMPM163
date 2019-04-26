@@ -1,6 +1,6 @@
 ﻿Shader "Custom/RotateUVs" {
     Properties {
-        _MainTex ("Base (RGB)", 2D) = "white" {}
+        _MainTex ("Texture", 2D) = "white" {}
         _RotationSpeed ("Rotation Speed", Float) = 2.0
     }
     SubShader {
@@ -17,11 +17,12 @@
         };
  
         float _RotationSpeed;
+        
         void vert (inout appdata_full v) {
             float sinX = sin ( _RotationSpeed * _Time );
-            float cosX = cos ( _RotationSpeed * _Time );
+
             float sinY = sin ( _RotationSpeed * _Time );
-            float2x2 rotationMatrix = float2x2( cosX, -sinX, sinY, cosX);
+            float2x2 rotationMatrix = float2x2( 0, -sinX, sinY, 0);
             v.texcoord.xy = mul ( v.texcoord.xy, rotationMatrix );
         }
  

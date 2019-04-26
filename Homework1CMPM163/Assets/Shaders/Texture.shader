@@ -1,82 +1,47 @@
-﻿Shader "Custom/DiffuseRotate"
+﻿Shader "Custom/PhongShader"
 {
     Properties
     {
-        [NoScaleOffset] _MainTex ("Texture", 2D) = "white" {}
-        _Angle ("Angle", float) = 1
-        _RotationSpeed ("Rotation Speed", Float) = 2.0
+        _Color("Color", Color) = (1,1,1,1)
+        _MainTex ("Texture", 2D) = "white" {}
     }
     SubShader
     {
-        Tags {"LightMode"="ForwardBase"}
-        Tags { "RenderType"="Opaque" "DisableBatching" = "True"  }
- 
+        Tags { "RenderType"="Opaque" }
+        LOD 100
+
         Pass
         {
- 
-           
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #include "UnityCG.cginc"
-            #include "Lighting.cginc"
- 
-            // compile shader into multiple variants, with and without shadows
-            // (we don't care about any lightmaps yet, so skip these variants)
-            #pragma multi_compile_fwdbase nolightmap nodirlightmap nodynlightmap novertexlight
-            // shadow helper functions and macros
-            #include "AutoLight.cginc"
-        uniform float _Angle;
+
+            struct appdata
+            {
+                float2 uv : TEXCOORD0;
+            };
+
             struct v2f
             {
                 float2 uv : TEXCOORD0;
-                SHADOW_COORDS(1) // put shadows data into TEXCOORD1
-                fixed3 diff : COLOR0;
-                fixed3 ambient : COLOR1;
-                float4 pos : SV_POSITION;
+                UNITY_FOG_COORDS(1)            
             };
-            float4 RotateAroundYInDegrees (float4 vertex, float degrees)
-                 {
-                     float alpha = degrees * UNITY_PI / 180.0;
-                     float sina, cosa;
-                     sincos(alpha, sina, cosa);
-                     float2x2 m = float2x2(cosa, -sina, sina, cosa);
-                     return float4(mul(m, vertex.xz), vertex.yw).xzyw;
-                 }
-       
-            v2f vert (appdata_base v)
+
+            sampler2D _MainTex;
+            float4 _MainTex_ST;
+
+            v2f vert (appdata v)
             {
                 v2f o;
-                v.vertex = RotateAroundYInDegrees(v.vertex, _Angle);
-                o.pos = UnityObjectToClipPos(v.vertex);
-                o.uv = v.texcoord;
-                half3 worldNormal = UnityObjectToWorldNormal(v.normal);
-                half nl = max(0, dot(worldNormal, _WorldSpaceLightPos0.xyz));
-                o.diff = nl * _LightColor0.rgb;
-                o.ambient = ShadeSH9(half4(worldNormal,1));
-                // compute shadows data
-                TRANSFER_SHADOW(o)
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 return o;
             }
- 
-            sampler2D _MainTex;
- 
             fixed4 frag (v2f i) : SV_Target
             {
-                fixed4 col = tex2D(_MainTex, i.uv);
-                // compute shadow attenuation (1.0 = fully lit, 0.0 = fully shadowed)
-                fixed shadow = SHADOW_ATTENUATION(i);
-                // darken light's illumination with shadow, keep ambient intact
-                fixed3 lighting = i.diff * shadow + i.ambient;
-                col.rgb *= lighting;
-                return col;
+                    float3 texture = tex2D(_MainTex, i.uv); 
+                    return float4(texture, 1.0);
             }
             ENDCG
         }
- 
-        // shadow casting support
-        UsePass "Legacy Shaders/VertexLit/SHADOWCASTER"
- 
-    }
- 
 }
+
