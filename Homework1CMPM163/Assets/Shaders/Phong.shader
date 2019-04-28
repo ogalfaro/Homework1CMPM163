@@ -4,8 +4,8 @@
     {
         _Color("Color", Color) = (1,1,1,1)
         _MainTex ("Texture", 2D) = "white" {}
-        _Shininess ("Shininess", Float) = 10 //Shininess
-        _SpecColor ("Specular Color", Color) = (1, 1, 1, 1) //Specular highlights color
+        _Shininess ("Shininess", Float) = 10 
+        _SpecColor ("Specular Color", Color) = (1, 1, 1, 1)
     }
     SubShader
     {
@@ -20,7 +20,7 @@
     
             #include "UnityCG.cginc"
 
-            uniform float4 _LightColor0; //From UnityCG
+            uniform float4 _LightColor0; 
             uniform float4 _Color; 
             uniform float4 _SpecColor;
             uniform float _Shininess; 
@@ -47,7 +47,7 @@
             v2f vert (appdata v)
             {
                 v2f o;
-                o.vertexInWorldCoords = mul(unity_ObjectToWorld, v.vertex); //Vertex position in WORLD coords
+                o.vertexInWorldCoords = mul(unity_ObjectToWorld, v.vertex); 
                 o.normal = normalize(mul(float4(v.normal, 0.0), unity_WorldToObject).xyz);
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
@@ -92,7 +92,7 @@
     
             #include "UnityCG.cginc"
 
-            uniform float4 _LightColor0; //From UnityCG
+            uniform float4 _LightColor0; 
             uniform float4 _Color; 
             uniform float4 _SpecColor;
             uniform float _Shininess; 
@@ -119,7 +119,7 @@
             v2f vert (appdata v)
             {
                 v2f o;
-                o.vertexInWorldCoords = mul(unity_ObjectToWorld, v.vertex); //Vertex position in WORLD coords
+                o.vertexInWorldCoords = mul(unity_ObjectToWorld, v.vertex); 
                 o.normal = normalize(mul(float4(v.normal, 0.0), unity_WorldToObject).xyz);
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
