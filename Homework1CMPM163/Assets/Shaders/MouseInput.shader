@@ -9,6 +9,7 @@ Shader "Custom/MouseInput"
         _mX("Mouse X", Float) = 0
         _mY("Mouse Y", Float) = 0
     }
+
     
     SubShader
     {
@@ -26,6 +27,7 @@ Shader "Custom/MouseInput"
 
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
+
             
             struct VertexShaderInput
             {

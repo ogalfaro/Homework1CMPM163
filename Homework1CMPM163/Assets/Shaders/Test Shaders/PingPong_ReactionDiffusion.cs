@@ -24,6 +24,7 @@ public class PingPong_ReactionDiffusion : MonoBehaviour
 
     Renderer rend;
     int count = 0;
+    int arrsize = 0;
 
     float[,,] grid; 
     float[,,] next; 
@@ -41,25 +42,27 @@ public class PingPong_ReactionDiffusion : MonoBehaviour
         int floatArraySize = width * height;
         Color[] floatArray1 = new Color[floatArraySize];
         Color[] floatArray2 = new Color[floatArraySize];
-
-        for (int i = 0; i < floatArraySize; i++)
+        while (arrsize < floatArraySize)
         {
-            floatArray1[i].r = 1.0f;
-            floatArray1[i].g = 0.0f;
-            floatArray1[i].b = 1.0f;
-            floatArray1[i].a = 1.0f;
+            floatArray1[arrsize].r = 1.0f;
+            floatArray1[arrsize].g = 0.0f;
+            floatArray1[arrsize].b = 0.0f;
+            floatArray1[arrsize].a = 1.0f;
 
-            floatArray2[i].r = 0.5f;
-            floatArray2[i].g = 0.5f;
-            floatArray2[i].b = 0.0f;
-            floatArray2[i].a = 1.0f;
+            floatArray2[arrsize].r = 0.5f;
+            floatArray2[arrsize].g = 0.5f;
+            floatArray2[arrsize].b = 0.0f;
+            floatArray2[arrsize].a = 1.0f;
+
+            arrsize++;
+
         }
 
        
 
         //tempTex2D.SetPixels(floatArray1, 0);
         texA.SetPixels(floatArray1, 0);
-        texB.SetPixels(floatArray2, 0);
+        //texB.SetPixels(floatArray2, 0);
         
         //fill in block of color
         Color seedColor = new Color();
@@ -103,10 +106,11 @@ public class PingPong_ReactionDiffusion : MonoBehaviour
 
     void Update()
     {
-        if (count % 2 == 0)
+        if (count % 3 == 0)
         {
             inputTex = texA;
             outputTex = texB;
+
         }
         else
         {

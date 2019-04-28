@@ -1,7 +1,7 @@
 ﻿Shader "Custom/RotateUVs" {
     Properties {
         _MainTex ("Texture", 2D) = "white" {}
-        _RotationSpeed ("Rotation Speed", Float) = 2.0
+        _RotationSpeed("Rotation Speed", Float) = 2.0
     }
     SubShader {
         Tags { "RenderType"="Opaque" }
@@ -20,7 +20,6 @@
         
         void vert (inout appdata_full v) {
             float sinX = sin ( _RotationSpeed * _Time );
-
             float sinY = sin ( _RotationSpeed * _Time );
             float2x2 rotationMatrix = float2x2( 0, -sinX, sinY, 0);
             v.texcoord.xy = mul ( v.texcoord.xy, rotationMatrix );
